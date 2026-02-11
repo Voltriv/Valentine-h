@@ -6,7 +6,7 @@ const yesBtn = document.getElementById('yesBtn');
 const timeFrame = document.getElementById('timeFrame');
 const PARTICLE_COUNT = 3500;
 const HEART_SIZE = 16;
-const TRAIL_COLOR = 'rgba(11, 10, 18, 0.45)';
+const TRAIL_COLOR = 'rgba(59, 15, 36, 0.4)';
 
 let width, height;
 let particles = [];
