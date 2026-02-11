@@ -1,0 +1,247 @@
+:root {
+    --primary: #ff4d9d;
+    --secondary: #ffb3d9;
+    --bg: #0b0a12;
+    --bg-accent: #170b1f;
+    --text: #f9f3f7;
+    --muted: rgba(249, 243, 247, 0.7);
+    --glow: rgba(255, 77, 157, 0.45);
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255, 77, 157, 0.2), transparent 45%),
+        radial-gradient(circle at 85% 10%, rgba(255, 179, 217, 0.15), transparent 50%),
+        linear-gradient(160deg, var(--bg), var(--bg-accent) 55%, #09060c);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.corner-meta {
+    position: fixed;
+    top: 18px;
+    right: 22px;
+    z-index: 30;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.corner-name {
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text);
+    text-shadow: 0 0 14px var(--glow);
+}
+
+.corner-time {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* --- UI Overlay --- */
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    /* Let clicks pass through to canvas for rotation */
+}
+
+.content-wrapper {
+    pointer-events: auto;
+    /* Re-enable clicks for buttons */
+    text-align: center;
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 50px;
+    /* Offset to center vertically relative to heart */
+}
+
+h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4rem;
+    margin: 0;
+    text-shadow: 0 0 24px var(--glow);
+    animation: float 3s ease-in-out infinite;
+    background: linear-gradient(to right, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-top: -10px;
+    text-shadow: 0 0 12px var(--glow);
+}
+
+/* --- Buttons --- */
+.btn-group {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 150px;
+    /* Space for the 3D heart */
+    height: 60px;
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    white-space: nowrap;
+}
+
+.btn-yes {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 0 24px var(--glow);
+    z-index: 2;
+    right: 80px;
+}
+
+.btn-yes:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 34px var(--primary);
+}
+
+.btn-no {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    position: absolute;
+    /* Allows it to move freely */
+    left: 100px;
+    /* Initial position offset */
+}
+
+
+/* --- Success Animations --- */
+.hidden {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.success-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 0%, #06030a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+}
+
+.success-overlay h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 5rem;
+    color: white;
+    text-shadow: 0 0 30px var(--primary);
+    transform: scale(0.5);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Heart Rain CSS */
+.heart-rain {
+    position: absolute;
+    top: -10vh;
+    color: var(--primary);
+    font-size: 20px;
+    animation: fall linear forwards;
+    z-index: 5;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3rem;
+    }
+
+    .corner-meta {
+        top: 14px;
+        right: 14px;
+    }
+
+    .corner-name {
+        font-size: 0.85rem;
+    }
+
+    .corner-time {
+        font-size: 0.65rem;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        margin-top: 120px;
+    }
+
+    .btn-no {
+        position: relative;
+        left: auto;
+        margin-top: 10px;
+    }
+}
