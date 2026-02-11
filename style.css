@@ -6,6 +6,10 @@
     --text: #fff6fb;
     --muted: rgba(255, 246, 251, 0.7);
     --glow: rgba(255, 77, 157, 0.65);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
 }
 
 *,
@@ -25,13 +29,14 @@ body {
     color: var(--text);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    min-height: 100svh;
     min-height: 100dvh;
 }
 
 .corner-name {
     position: fixed;
-    top: 18px;
-    left: 22px;
+    top: calc(18px + var(--safe-top));
+    left: calc(22px + var(--safe-left));
     z-index: 30;
     font-size: clamp(0.75rem, 2.6vw, 1rem);
     letter-spacing: clamp(1px, 0.7vw, 3px);
@@ -44,8 +49,8 @@ body {
 
 .corner-time {
     position: fixed;
-    top: 18px;
-    right: 22px;
+    top: calc(18px + var(--safe-top));
+    right: calc(22px + var(--safe-right));
     z-index: 30;
     font-size: clamp(0.6rem, 2.2vw, 0.8rem);
     letter-spacing: clamp(1px, 0.6vw, 2px);
@@ -71,12 +76,15 @@ canvas {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100svh;
+    height: 100dvh;
     z-index: 10;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: calc(10px + var(--safe-top)) calc(10px + var(--safe-right))
+        calc(10px + var(--safe-bottom)) calc(10px + var(--safe-left));
     pointer-events: none;
     /* Let clicks pass through to canvas for rotation */
 }
@@ -140,7 +148,7 @@ p {
 
 .corner-center {
     position: fixed;
-    top: 18px;
+    top: calc(18px + var(--safe-top));
     left: 50%;
     transform: translateX(-50%);
     z-index: 30;
@@ -223,6 +231,8 @@ button {
     align-items: center;
     flex-direction: column;
     gap: 14px;
+    padding: calc(20px + var(--safe-top)) calc(16px + var(--safe-right))
+        calc(20px + var(--safe-bottom)) calc(16px + var(--safe-left));
     z-index: 20;
     opacity: 0;
     transition: opacity 1s ease;
@@ -303,26 +313,30 @@ button {
     }
 
     .corner-center {
-        top: 14px;
+        top: calc(14px + var(--safe-top));
         font-size: 0.85rem;
         letter-spacing: 2px;
     }
 
     .corner-name {
-        top: 14px;
-        left: 14px;
+        top: calc(14px + var(--safe-top));
+        left: calc(14px + var(--safe-left));
         font-size: 0.85rem;
     }
 
     .corner-time {
-        top: 14px;
-        right: 14px;
+        top: calc(14px + var(--safe-top));
+        right: calc(14px + var(--safe-right));
         font-size: 0.65rem;
     }
 
     .btn-group {
         flex-direction: column;
         margin-top: 120px;
+    }
+
+    .btn-yes {
+        right: 0;
     }
 
     .btn-no {
@@ -349,25 +363,27 @@ button {
     }
 
     .corner-name {
-        top: 12px;
+        top: calc(12px + var(--safe-top));
     }
 
     .corner-center {
-        top: 34px;
+        top: calc(34px + var(--safe-top));
     }
 
     .corner-time {
-        top: 56px;
+        top: calc(56px + var(--safe-top));
         max-width: 90vw;
         letter-spacing: 1px;
     }
 
     .content-wrapper {
-        margin-bottom: 24px;
+        margin-bottom: clamp(12px, 4vh, 24px);
+        gap: 1rem;
     }
 
     .btn-group {
-        margin-top: clamp(70px, 14vh, 120px);
+        margin-top: clamp(50px, 12vh, 110px);
+        height: auto;
     }
 
     button {
