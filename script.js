@@ -49,7 +49,7 @@ function updateTimeFrame() {
         hour: 'numeric',
         minute: '2-digit'
     });
-    timeFrame.textContent = `Time Frame: ${date} · ${time}`;
+    timeFrame.textContent = `${date} · ${time}`;
 }
 
 setInterval(updateTimeFrame, 1000 * 30);
@@ -113,6 +113,7 @@ window.acceptProposal = function () {
     // Show Success Layer
     const layer = document.getElementById('successScreen');
     layer.style.opacity = '1';
+    layer.style.pointerEvents = 'auto';
     layer.querySelector('h2').style.transform = 'scale(1)';
 
     // Trigger CSS Heart Rain
