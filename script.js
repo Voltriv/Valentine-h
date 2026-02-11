@@ -5,8 +5,8 @@ const noBtn = document.getElementById('noBtn');
 const yesBtn = document.getElementById('yesBtn');
 const timeFrame = document.getElementById('timeFrame');
 const PARTICLE_COUNT = 3500;
-const HEART_SIZE = 16;
-const TRAIL_COLOR = 'rgba(59, 15, 36, 0.4)';
+let heartSize = 16;
+const TRAIL_COLOR = 'rgba(35, 9, 16, 0.22)';
 
 let width, height;
 let particles = [];
@@ -21,11 +21,11 @@ const phrases = [
     "Look at the other button ->", "Error 404: No not found"
 ];
 let phraseIndex = 0;
+const SAFE_MARGIN = 16;
 
 // --- SETUP ---
 window.onload = () => {
     resize();
-    initParticles();
     animate();
     updateTimeFrame();
 };
@@ -34,6 +34,9 @@ window.addEventListener('resize', resize);
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    const minDim = Math.min(width, height);
+    heartSize = Math.max(16, Math.min(24, minDim * 0.045));
+    initParticles();
 }
 
 function updateTimeFrame() {
@@ -69,25 +72,63 @@ const moveNoButton = () => {
     noBtn.innerText = phrases[phraseIndex];
 
     // Random Position Calculation
-    // We calculate position relative to the window to ensure it stays on screen
+    // Keep the button on screen and avoid overlapping the title/top text
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
-    // Random coords within 80% of screen to avoid edges
-    const maxX = window.innerWidth * 0.8;
-    const maxY = window.innerHeight * 0.8;
-    const randomX = Math.random() * maxX - (maxX / 2);
-    const randomY = Math.random() * maxY - (maxY / 2);
+    const minX = SAFE_MARGIN;
+    const minY = SAFE_MARGIN;
+    const maxX = viewportWidth - btnWidth - SAFE_MARGIN;
+    const maxY = viewportHeight - btnHeight - SAFE_MARGIN;
+    const availableX = Math.max(0, maxX - minX);
+    const availableY = Math.max(0, maxY - minY);
 
-    // We use Fixed position logic via translate for smoother performance
-    // But since the button is in a relative flex container, we set position to absolute
-    // relative to the nearest positioned ancestor (btn-group) or just use transform
+    const avoidSelectors = ['.title-box', '.corner-name', '.corner-center', '.corner-time'];
+    const avoidRects = avoidSelectors
+        .map(selector => document.querySelector(selector))
+        .filter(Boolean)
+        .map(el => el.getBoundingClientRect());
 
-    // Quick hack: Move it out of the flow slightly
+    const intersects = (x, y, rect, padding = 12) => {
+        const left = x;
+        const top = y;
+        const right = x + btnWidth;
+        const bottom = y + btnHeight;
+
+        const paddedLeft = rect.left - padding;
+        const paddedTop = rect.top - padding;
+        const paddedRight = rect.right + padding;
+        const paddedBottom = rect.bottom + padding;
+
+        return (
+            right > paddedLeft &&
+            left < paddedRight &&
+            bottom > paddedTop &&
+            top < paddedBottom
+        );
+    };
+
+    let finalX = minX + availableX * 0.5;
+    let finalY = minY + availableY * 0.5;
+
+    for (let i = 0; i < 12; i++) {
+        const candidateX = minX + Math.random() * availableX;
+        const candidateY = minY + Math.random() * availableY;
+
+        const hitsAvoid = avoidRects.some(rect => intersects(candidateX, candidateY, rect));
+        if (!hitsAvoid) {
+            finalX = candidateX;
+            finalY = candidateY;
+            break;
+        }
+    }
+
     noBtn.style.position = 'fixed';
-    noBtn.style.left = '50%';
-    noBtn.style.top = '50%';
-    noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    noBtn.style.left = `${finalX}px`;
+    noBtn.style.top = `${finalY}px`;
+    noBtn.style.transform = 'none';
 
     // Visual Style update to make it look "weaker"
     noBtn.style.opacity = Math.max(0.5, 1 - (phraseIndex * 0.1));
@@ -163,7 +204,7 @@ class Particle {
         let t = Math.random() * Math.PI * 2;
         // Distribute points more evenly
         let u = Math.random();
-        let scale = Math.pow(u, 1 / 3) * HEART_SIZE; // Volume distribution
+        let scale = Math.pow(u, 1 / 3) * heartSize; // Volume distribution
 
         let x = 16 * Math.pow(Math.sin(t), 3);
         let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
