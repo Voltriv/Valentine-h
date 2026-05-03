@@ -279,6 +279,105 @@ button {
     transform: translateY(0) scale(0.99);
 }
 
+.lunch-panel {
+    width: min(88vw, 420px);
+    margin-top: 12px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(180deg, rgba(255, 246, 251, 0.12), rgba(8, 4, 12, 0.55));
+    box-shadow: 0 14px 30px rgba(8, 4, 12, 0.6);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.lunch-panel.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.lunch-panel__badge {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.lunch-panel__code {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: clamp(0.2rem, 1.4vw, 0.5rem);
+    margin: 6px 0 8px;
+    color: var(--text);
+    text-shadow: 0 0 16px var(--glow);
+    font-variant-numeric: tabular-nums;
+}
+
+.lunch-panel__text {
+    font-size: 0.95rem;
+    letter-spacing: 0.4px;
+    text-transform: none;
+    margin: 0;
+    color: rgba(255, 246, 251, 0.92);
+    line-height: 1.4;
+}
+
+.lunch-panel__text.is-hidden {
+    display: none;
+}
+
+.lunch-panel__lock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.lunch-panel__input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(8, 4, 12, 0.55);
+    color: var(--text);
+    font-size: 1rem;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    outline: none;
+}
+
+.lunch-panel__input::placeholder {
+    letter-spacing: 0.05rem;
+    color: rgba(255, 246, 251, 0.6);
+}
+
+.lunch-panel__input:focus {
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 16px rgba(255, 77, 157, 0.25);
+}
+
+.lunch-panel__unlock {
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 77, 157, 0.25);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.lunch-panel__unlock:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.55);
+    box-shadow: 0 10px 20px rgba(8, 4, 12, 0.45);
+}
+
+
 /* Heart Rain CSS */
 .heart-rain {
     position: absolute;

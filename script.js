@@ -4,9 +4,16 @@ const ctx = canvas.getContext('2d');
 const noBtn = document.getElementById('noBtn');
 const yesBtn = document.getElementById('yesBtn');
 const timeFrame = document.getElementById('timeFrame');
+const lunchCard = document.getElementById('lunchCard');
+const lunchPanel = document.getElementById('lunchPanel');
+const lunchDetails = document.getElementById('lunchDetails');
+const lunchInput = document.getElementById('lunchInput');
+const lunchUnlock = document.getElementById('lunchUnlock');
 const PARTICLE_COUNT = 3500;
 let heartSize = 16;
 const TRAIL_COLOR = 'rgba(35, 9, 16, 0.22)';
+const LUNCH_PASSCODE = '0803';
+const LUNCH_DETAILS = 'Buldak beside UPang or The Crunch in front of UPang';
 
 let width, height;
 let particles = [];
@@ -28,6 +35,7 @@ window.onload = () => {
     resize();
     animate();
     updateTimeFrame();
+    initLunchCard();
 };
 
 window.addEventListener('resize', resize);
@@ -56,6 +64,50 @@ function updateTimeFrame() {
 }
 
 setInterval(updateTimeFrame, 1000 * 30);
+
+function initLunchCard() {
+    if (lunchDetails) lunchDetails.textContent = LUNCH_DETAILS;
+    if (!lunchCard || !lunchPanel) return;
+
+    lunchCard.addEventListener('click', () => {
+        const isOpen = lunchPanel.classList.toggle('is-open');
+        lunchCard.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        lunchPanel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        if (isOpen && lunchInput) {
+            lunchInput.focus();
+        }
+    });
+
+    if (lunchInput) {
+        lunchInput.addEventListener('input', () => {
+            const digitsOnly = lunchInput.value.replace(/\D/g, '').slice(0, 4);
+            if (lunchInput.value !== digitsOnly) lunchInput.value = digitsOnly;
+        });
+
+        lunchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                attemptUnlock();
+            }
+        });
+    }
+
+    if (lunchUnlock) {
+        lunchUnlock.addEventListener('click', attemptUnlock);
+    }
+}
+
+function attemptUnlock() {
+    if (!lunchInput || !lunchDetails) return;
+    const enteredCode = lunchInput.value.trim();
+    if (enteredCode === LUNCH_PASSCODE) {
+        lunchDetails.classList.remove('is-hidden');
+        lunchPanel?.classList.add('is-unlocked');
+    } else {
+        lunchDetails.classList.add('is-hidden');
+        lunchPanel?.classList.remove('is-unlocked');
+    }
+}
 
 // --- INTERACTION LOGIC ---
 

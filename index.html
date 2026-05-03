@@ -15,7 +15,25 @@
     <div class="success-overlay" id="successScreen">
         <h2>I Knew It! ❤️</h2>
         <p>Best Decision Ever</p>
-        <button class="special-card" id="lunchCard" type="button">Sabay tayo lunch</button>
+        <button class="special-card" id="lunchCard" type="button" aria-expanded="false" aria-controls="lunchPanel">
+            Sabay tayo lunch
+        </button>
+        <div class="lunch-panel" id="lunchPanel" aria-hidden="true" aria-live="polite">
+            <div class="lunch-panel__lock">
+                <input
+                    class="lunch-panel__input"
+                    id="lunchInput"
+                    type="password"
+                    inputmode="numeric"
+                    maxlength="4"
+                    autocomplete="one-time-code"
+                    placeholder="Enter 4-digit code"
+                    aria-label="Enter 4 digit pass code"
+                />
+                <button class="lunch-panel__unlock" id="lunchUnlock" type="button">Unlock details</button>
+            </div>
+            <div class="lunch-panel__text is-hidden" id="lunchDetails"></div>
+        </div>
     </div>
 
     <div class="container" id="mainUI">
